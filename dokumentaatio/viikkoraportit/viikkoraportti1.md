@@ -1,4 +1,4 @@
-#Viikkoraportti 1
+# Viikkoraportti 1
 
 Tämän viikon aikana tutustuin kurssimateriaaliin ja mietin, millaista projektia haluan tehdä. Aiheen valitsemisen jälkeen tutustuin Shunting yard algoritmiin ja siihen liittyviin aiheisiin. Tutustuin lisäksi eri graafisiin käyttöliittymiin ja valitsin niistä itselleni sopivimman. Aloitin myös projektin suunnittelua, loin GitHub-repositorion  ja kirjoitin määrittelydokumenttia.
 
