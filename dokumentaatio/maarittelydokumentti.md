@@ -1,6 +1,6 @@
 # Määrittelydokumentti
 
-Projektin dokumentaatio kirjoitetaan suomeksi. Käytän projektin ohjelmointikielenä Pythonia, ja hallitsen pelkästään Pythonia niin, että voisin vertaisarvioimaan muita projekteja. Kuulun tietojenkäsittelytieteen kandidaattiohjelmaan. 
+Projektin dokumentaatio kirjoitetaan suomeksi, mutta koodi englanniksi. Käytän projektin ohjelmointikielenä Pythonia, ja hallitsen pelkästään Pythonia niin, että voisin vertaisarvioimaan muita projekteja. Kuulun tietojenkäsittelytieteen kandidaattiohjelmaan.
 
 ## Projektin kuvaus
 
