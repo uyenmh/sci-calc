@@ -24,10 +24,10 @@ Projektin ytimenä on Shunting yard algoritmin toteuttaminen ja sen hyödyntämi
 
 Alla on listattu ainakin osa niistä lähteitä, joita tulen käyttämään projektin aikana.
 
-[Shunting yard algorithm (Wikipedia)](https://en.wikipedia.org/wiki/Shunting_yard_algorithm)
-[Shunting yard algorithm (Emory Oxford College)](https://mathcenter.oxford.emory.edu/site/cs171/shuntingYardAlgorithm/)
-[Reverse Polish notation (Wikipedia)](https://en.wikipedia.org/wiki/Reverse_Polish_notation)
-[Parsing (Wikipedia)](https://en.wikipedia.org/wiki/Parsing)
-[Stack in Python (Geeks for Geeks)](https://www.geeksforgeeks.org/python/stack-in-python/)
-[Stacks in Python (W3Schools)](https://www.w3schools.com/python/python_dsa_stacks.asp)
-[Tkinter dokumentaatio](https://docs.python.org/3/library/tkinter.html)
+- [Shunting yard algorithm (Wikipedia)](https://en.wikipedia.org/wiki/Shunting_yard_algorithm)
+- [Shunting yard algorithm (Emory Oxford College)](https://mathcenter.oxford.emory.edu/site/cs171/shuntingYardAlgorithm/)
+- [Reverse Polish notation (Wikipedia)](https://en.wikipedia.org/wiki/Reverse_Polish_notation)
+- [Parsing (Wikipedia)](https://en.wikipedia.org/wiki/Parsing)
+- [Stack in Python (Geeks for Geeks)](https://www.geeksforgeeks.org/python/stack-in-python/) 
+- [Stacks in Python (W3Schools)](https://www.w3schools.com/python/python_dsa_stacks.asp) 
+- [Tkinter dokumentaatio](https://docs.python.org/3/library/tkinter.html) 
