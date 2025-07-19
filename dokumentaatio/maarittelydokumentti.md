@@ -6,7 +6,7 @@ Projektin dokumentaatio kirjoitetaan suomeksi, mutta koodi englanniksi. Käytän
 
 ### Aihe 
 
-Projektin tarkoituksena on rakentaa tieteellinen laskin, joka laskee annetun matemaattisen lausekkeen arvon. Annettu lauseke eli ohjelman saama syöte voi sisältää lukuarvoja, peruslaskutoimituksia ja joitakin funktioita, kuten sqrt, sin, min ja max. Laskin ei laske virheellisiä lausekkeita ja antaa käyttäjälle virheilmoituksen, jos lauseke on virheellinen. 
+Projektin tarkoituksena on rakentaa tieteellinen laskin, joka laskee annetun matemaattisen lausekkeen arvon. Annettu lauseke eli ohjelman saama syöte voi sisältää lukuarvoja, peruslaskutoimituksia ja joitakin funktioita, kuten sqrt, sin, min ja max. Laskin sisältää myös muuttujia, joihin voi tallettaa lausekkeiden laskettuja arvoja — muuttujia voidaan käyttää lausekkeissa. Laskin ei laske virheellisiä lausekkeita ja antaa käyttäjälle virheilmoituksen, jos lauseke on virheellinen.
 
 ### Toteutus
 
