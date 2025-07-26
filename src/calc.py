@@ -15,12 +15,19 @@ class Calculator:
         self.output_queue = []
         self.operator_stack = []
         self.tokens = []
+        self.left_parenthesis = 0
+        self.right_parenthesis = 0
 
         self.reformat_input()
         self.tokenize_input()
         self.convert_infix_to_rpn()
 
     def insert_input(self, input):
+        """Tokenizes the infix into RPN.
+
+        Args:
+            input (str): The mathematical expression given by the user.
+        """
         self.input = input
         self.reformatted_input = ""
         self.output_queue = []
@@ -31,32 +38,47 @@ class Calculator:
         self.tokenize_input()
         self.convert_infix_to_rpn()
 
-    def validate_input(self, current_input, addition_to_input):
-        message = ""
-        left_parenthesis = 0
-        right_parenthesis = 0
+    def check_validity_of_input(self, current_input, addition_to_input):
+        """Checks if the given character is valid with the existing input.
 
-        if current_input and current_input[-1] in "+-×÷" and addition_to_input in "+-×÷":
-            message = "Two consecutive operators not allowed."
+        Args:
+            current_input (str): The existing input.
+            addition_to_input (str): The character to be added to the input.
+
+        Returns:
+            str: An error message if there is one, otherwise nothing.
+        """
+        message = ""
+
+        if current_input:
+            if current_input[-1] in "+-×÷" and addition_to_input in "+-×÷":
+                message = "Two consecutive operators not allowed."
+            elif (self.left_parenthesis > self.right_parenthesis) and current_input[-1] == "(" and addition_to_input == ")":
+                message = "Parenthesis cannot be left empty."
+            elif current_input[-1] == "(" and addition_to_input == "×":
+                message = "The multiplication sign is not valid after left parenthesis."
+            elif current_input[-1] == "(" and addition_to_input == "÷":
+                message = "The division sign is not valid after left parenthesis."
         elif not current_input and addition_to_input in "×÷":
             if addition_to_input == "×":
                 message = "The expression cannot start with a multiplication sign."
             else:
                 message = "The expression cannot start with a division sign."
-        elif left_parenthesis <= right_parenthesis and addition_to_input == ")":
-            message = "Insert the left parenthesis first."
-
-        if addition_to_input == "(":
-            left_parenthesis += 1
-        elif addition_to_input == ")" and left_parenthesis > right_parenthesis and current_input[-1] in "1234567890":
-            right_parenthesis += 1
+        elif self.left_parenthesis <= self.right_parenthesis and addition_to_input == ")":
+            message = "Insert a left parenthesis first."
 
         if message == "":
+            if addition_to_input == "(":
+                self.left_parenthesis += 1
+            elif addition_to_input == ")" and (self.left_parenthesis > self.right_parenthesis):
+                self.right_parenthesis += 1
             return
         else:
             return message
 
     def reformat_input(self):
+        """Reformats a valid mathematical expression for easier tokenization.
+        """
         prev_prev_elem = ""
         prev_elem = ""
 
@@ -92,17 +114,13 @@ class Calculator:
             else:
                 self.reformatted_input = f"{self.reformatted_input} {self.input[i]}"
 
-
             prev_prev_elem = prev_elem
             prev_elem = self.input[i]
-
-            print(self.reformatted_input)
 
     def tokenize_input(self):
         """Tokenizes the given mathematical expression into a list of tokens.
         """
         self.tokens = self.reformatted_input.split()
-        print(self.tokens)
 
     def convert_infix_to_rpn(self):
         """Converts the given mathematical expression (from token format) into RPN.
@@ -129,6 +147,7 @@ class Calculator:
                     operator = self.operator_stack[-1]
                     if operator in "(":
                         self.operator_stack.pop()
+                        break
                     else:
                         self.operator_stack.pop()
                         self.output_queue.append(operator)
@@ -138,8 +157,6 @@ class Calculator:
         while len(self.operator_stack) > 0:
             operator = self.operator_stack.pop()
             self.output_queue.append(operator)
-
-        print(self.output_queue)
 
     def calculate(self):
         """Calculates the solution of the given mathematical expression from the RPN.

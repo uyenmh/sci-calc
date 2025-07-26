@@ -84,12 +84,12 @@ class CalculatorUI:
         """Adds the given character into the input field of the calculator if the character is valid.
 
         Args:
-            input (str): The given character that will be added onto the input field.
+            addition_to_input (str): The given character that will be added onto the input field.
         """
         current_input = self.entry.get()
 
-        if self.calc.validate_input(current_input, addition_to_input):
-            message = self.calc.validate_input(current_input, addition_to_input)
+        if self.calc.check_validity_of_input(current_input, addition_to_input):
+            message = self.calc.check_validity_of_input(current_input, addition_to_input)
             tk.messagebox.showerror(title="Error", message=f"Invalid format: {message}")
         else:
             self.entry.config(state="normal")
@@ -103,12 +103,21 @@ class CalculatorUI:
         self.entry.delete(0, tk.END)
         self.entry.config(state="disabled")
 
+        self.calc.left_parenthesis = 0
+        self.calc.right_parenthesis = 0
+
     def delete_last_char(self):
         """Deletes the last character from input field of the calculator.
         """
         self.entry.config(state="normal")
         self.entry.delete(self.entry.index(tk.END) - 1)
         self.entry.config(state="disabled")
+
+        last_char = self.entry.get()[-1]
+        if last_char == "(":
+            self.calc.left_parenthesis -= 1
+        elif last_char == ")":
+            self.calc.right_parenthesis -= 1
 
     def calculate_input(self):
         """Calculates the solution to the given input (mathematical expression).
