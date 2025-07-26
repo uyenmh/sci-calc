@@ -53,7 +53,8 @@ class Calculator:
                 message = "Two consecutive operators not allowed."
             elif (
                 (self.left_parenthesis > self.right_parenthesis)
-                and current_input[-1] == "(" and addition_to_input == ")"
+                and current_input[-1] == "("
+                and addition_to_input == ")"
             ):
                 message = "Parenthesis cannot be left empty."
             elif current_input[-1] == "(" and addition_to_input == "×":
@@ -65,7 +66,8 @@ class Calculator:
                 message = "The expression cannot start with a multiplication sign."
             else:
                 message = "The expression cannot start with a division sign."
-        elif self.left_parenthesis <= self.right_parenthesis and addition_to_input == ")":
+
+        if self.left_parenthesis <= self.right_parenthesis and addition_to_input == ")":
             message = "Insert a left parenthesis first."
 
         if message == "":
