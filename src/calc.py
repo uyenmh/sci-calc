@@ -93,11 +93,6 @@ class Calculator:
                     self.reformatted_input += char
                 elif char == "(":
                     self.reformatted_input += f"1 × {char}"
-            elif prev_char in "+-" and char == "(":
-                if prev_char == "+":
-                    self.reformatted_input += f" 1 × {char}"
-                else:
-                    self.reformatted_input += f"+ -1 × {char}"
             elif prev_prev_char == "(" and prev_char in "+-" and char in "1234567890.":
                 self.reformatted_input += char
             elif prev_char in "1234567890" and char in "1234567890.":
