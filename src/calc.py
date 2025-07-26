@@ -4,25 +4,105 @@ class Calculator:
     """A class that calculates the solution to the given mathematical expression
         and returns it as an integer.
     """
-    def __init__(self, input):
+    def __init__(self, input=""):
         """The class constructor. Tokenizes the infix into RPN.
 
         Args:
             input (str): The mathematical expression given by the user.
         """
         self.input = input
+        self.reformatted_input = ""
         self.output_queue = []
         self.operator_stack = []
         self.tokens = []
 
+        self.reformat_input()
         self.tokenize_input()
         self.convert_infix_to_rpn()
+
+    def insert_input(self, input):
+        self.input = input
+        self.reformatted_input = ""
+        self.output_queue = []
+        self.operator_stack = []
+        self.tokens = []
+
+        self.reformat_input()
+        self.tokenize_input()
+        self.convert_infix_to_rpn()
+
+    def validate_input(self, current_input, addition_to_input):
+        message = ""
+        left_parenthesis = 0
+        right_parenthesis = 0
+
+        if current_input and current_input[-1] in "+-×÷" and addition_to_input in "+-×÷":
+            message = "Two consecutive operators not allowed."
+        elif not current_input and addition_to_input in "×÷":
+            if addition_to_input == "×":
+                message = "The expression cannot start with a multiplication sign."
+            else:
+                message = "The expression cannot start with a division sign."
+        elif left_parenthesis <= right_parenthesis and addition_to_input == ")":
+            message = "Insert the left parenthesis first."
+
+        if addition_to_input == "(":
+            left_parenthesis += 1
+        elif addition_to_input == ")" and left_parenthesis > right_parenthesis and current_input[-1] in "1234567890":
+            right_parenthesis += 1
+
+        if message == "":
+            return
+        else:
+            return message
+
+    def reformat_input(self):
+        prev_prev_elem = ""
+        prev_elem = ""
+
+        for i in range(len(self.input)):
+            if len(self.reformatted_input) == 0:
+                self.reformatted_input = f"{self.reformatted_input}{self.input[i]}"
+            elif prev_elem in "+-" and self.input[i] == "(":
+                if prev_elem == "+":
+                    self.reformatted_input = f"{self.reformatted_input} 1 × {self.input[i]}"
+                else:
+                    self.reformatted_input = f"{self.reformatted_input[:-1]}+ -1 × {self.input[i]}"
+            elif len(self.reformatted_input) == 1 and prev_elem in "+-":
+                if self.input[i] in "1234567890.":
+                    self.reformatted_input = f"{self.reformatted_input}{self.input[i]}"
+                else:
+                    self.reformatted_input = f"{self.reformatted_input} {self.input[i]}"
+            elif prev_elem in "()" and self.input[i] in "+-":
+                self.reformatted_input = f"{self.reformatted_input} {self.input[i]}"
+            elif prev_prev_elem == "(" and prev_elem in "+-" and self.input[i] in "1234567890.":
+                self.reformatted_input = f"{self.reformatted_input}{self.input[i]}"
+            elif prev_elem in "1234567890" and self.input[i] in "1234567890.":
+                self.reformatted_input = f"{self.reformatted_input}{self.input[i]}"
+            elif prev_elem == "." and self.input[i] in "1234567890":
+                self.reformatted_input = f"{self.reformatted_input}{self.input[i]}"
+            elif prev_elem in "1234567890" and self.input[i] in "+-×÷)":
+                self.reformatted_input = f"{self.reformatted_input} {self.input[i]}"
+            elif prev_elem in "+-×÷(" and self.input[i] in "1234567890.":
+                self.reformatted_input = f"{self.reformatted_input} {self.input[i]}"
+            elif prev_elem in "1234567890" and self.input[i] == "(":
+                self.reformatted_input = f"{self.reformatted_input} × {self.input[i]}"
+            elif prev_elem == ")" and self.input[i] in "1234567890.":
+                self.reformatted_input = f"{self.reformatted_input} × {self.input[i]}"
+            else:
+                self.reformatted_input = f"{self.reformatted_input} {self.input[i]}"
+
+
+            prev_prev_elem = prev_elem
+            prev_elem = self.input[i]
+
+            print(self.reformatted_input)
 
     def tokenize_input(self):
         """Tokenizes the given mathematical expression into a list of tokens.
         """
-        pattern = r'(\d+\.\d+|\d+|[()+\-×÷])'
-        self.tokens = re.findall(pattern, self.input)
+        self.tokens = self.reformatted_input.split()
+        print(self.tokens)
 
     def convert_infix_to_rpn(self):
         """Converts the given mathematical expression (from token format) into RPN.
@@ -58,6 +138,8 @@ class Calculator:
         while len(self.operator_stack) > 0:
             operator = self.operator_stack.pop()
             self.output_queue.append(operator)
+
+        print(self.output_queue)
 
     def calculate(self):
         """Calculates the solution of the given mathematical expression from the RPN.

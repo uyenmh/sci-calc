@@ -6,13 +6,14 @@ class CalculatorUI:
     """A class responsible for the UI of the calculator.
     """
     def __init__(self, root):
-        """The class constructor. Initializes the window for the calculator.
+        """The class constructor. Initializes the window for the calculator and the calculator itself.
 
         Args:
             root (tkinter.Tk): The root to initialize the window for the calculator. 
         """
         self.root = root
         self.entry = None
+        self.calc = Calculator()
 
         self.calculator_view()
 
@@ -79,15 +80,21 @@ class CalculatorUI:
         start_parenthesis_button.grid(row=1, column=1)
         end_parenthesis_button.grid(row=1, column=2)
 
-    def add_to_entry(self, input):
-        """Adds the given character into the input field of the calculator.
+    def add_to_entry(self, addition_to_input):
+        """Adds the given character into the input field of the calculator if the character is valid.
 
         Args:
             input (str): The given character that will be added onto the input field.
         """
-        self.entry.config(state="normal")
-        self.entry.insert(tk.END, input)
-        self.entry.config(state="disabled")
+        current_input = self.entry.get()
+
+        if self.calc.validate_input(current_input, addition_to_input):
+            message = self.calc.validate_input(current_input, addition_to_input)
+            tk.messagebox.showerror(title="Error", message=f"Invalid format: {message}")
+        else:
+            self.entry.config(state="normal")
+            self.entry.insert(tk.END, addition_to_input)
+            self.entry.config(state="disabled")
 
     def clear_entry(self):
         """Clears the input field of the calculator.
@@ -107,8 +114,8 @@ class CalculatorUI:
         """Calculates the solution to the given input (mathematical expression).
         """
         input = self.entry.get()
-        calc = Calculator(input)
-        solution = calc.calculate()
+        self.calc.insert_input(input)
+        solution = self.calc.calculate()
 
         self.entry.config(state="normal")
         self.entry.delete(0, tk.END)
