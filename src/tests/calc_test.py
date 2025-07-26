@@ -99,10 +99,20 @@ class TestCalculator(unittest.TestCase):
             self.input += "3"
 
         self.calc.check_validity_of_input(self.input, ")")
+        if message == "":
+            self.input += ")"
 
         self.assertEqual(self.calc.right_parenthesis, 1)
 
         self.calc.check_validity_of_input(self.input, ")")
+        if message == "":
+            self.input += ")"
+
+        self.assertEqual(self.calc.right_parenthesis, 2)
+
+        self.calc.check_validity_of_input(self.input, ")")
+        if message == "":
+            self.input += ")"
 
         self.assertEqual(self.calc.right_parenthesis, 2)
 
