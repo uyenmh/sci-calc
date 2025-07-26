@@ -87,10 +87,11 @@ class CalculatorUI:
             addition_to_input (str): The given character that will be added onto the input field.
         """
         current_input = self.entry.get()
+        message = self.calc.check_validity_of_input(current_input, addition_to_input)
 
-        if self.calc.check_validity_of_input(current_input, addition_to_input):
-            message = self.calc.check_validity_of_input(current_input, addition_to_input)
-            tk.messagebox.showerror(title="Error", message=f"Invalid format: {message}")
+
+        if message != "":
+            messagebox.showerror(title="Error", message=f"Invalid format: {message}")
         else:
             self.entry.config(state="normal")
             self.entry.insert(tk.END, addition_to_input)

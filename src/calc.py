@@ -1,16 +1,14 @@
-import re
-
 class Calculator:
     """A class that calculates the solution to the given mathematical expression
         and returns it as an integer.
     """
-    def __init__(self, input=""):
+    def __init__(self, user_input=""):
         """The class constructor. Tokenizes the infix into RPN.
 
         Args:
-            input (str): The mathematical expression given by the user.
+            user_input (str): The mathematical expression given by the user.
         """
-        self.input = input
+        self.input = user_input
         self.reformatted_input = ""
         self.output_queue = []
         self.operator_stack = []
@@ -22,13 +20,13 @@ class Calculator:
         self.tokenize_input()
         self.convert_infix_to_rpn()
 
-    def insert_input(self, input):
+    def insert_input(self, user_input):
         """Tokenizes the infix into RPN.
 
         Args:
-            input (str): The mathematical expression given by the user.
+            user__input (str): The mathematical expression given by the user.
         """
-        self.input = input
+        self.input = user_input
         self.reformatted_input = ""
         self.output_queue = []
         self.operator_stack = []
@@ -53,7 +51,10 @@ class Calculator:
         if current_input:
             if current_input[-1] in "+-×÷" and addition_to_input in "+-×÷":
                 message = "Two consecutive operators not allowed."
-            elif (self.left_parenthesis > self.right_parenthesis) and current_input[-1] == "(" and addition_to_input == ")":
+            elif (
+                (self.left_parenthesis > self.right_parenthesis)
+                and current_input[-1] == "(" and addition_to_input == ")"
+            ):
                 message = "Parenthesis cannot be left empty."
             elif current_input[-1] == "(" and addition_to_input == "×":
                 message = "The multiplication sign is not valid after left parenthesis."
@@ -70,52 +71,48 @@ class Calculator:
         if message == "":
             if addition_to_input == "(":
                 self.left_parenthesis += 1
-            elif addition_to_input == ")" and (self.left_parenthesis > self.right_parenthesis):
+            elif (
+                addition_to_input == ")"
+                and (self.left_parenthesis > self.right_parenthesis)
+            ):
                 self.right_parenthesis += 1
-            return
-        else:
-            return message
+
+        return message
 
     def reformat_input(self):
         """Reformats a valid mathematical expression for easier tokenization.
         """
-        prev_prev_elem = ""
-        prev_elem = ""
+        prev_prev_char = ""
+        prev_char = ""
 
-        for i in range(len(self.input)):
-            if len(self.reformatted_input) == 0:
-                self.reformatted_input = f"{self.reformatted_input}{self.input[i]}"
-            elif prev_elem in "+-" and self.input[i] == "(":
-                if prev_elem == "+":
-                    self.reformatted_input = f"{self.reformatted_input} 1 × {self.input[i]}"
+        for index, char in enumerate(self.input):
+            if index == 0:
+                self.reformatted_input += char
+            elif index == 1 and prev_char in "+-":
+                if char in "1234567890.":
+                    self.reformatted_input += char
+                elif char == "(":
+                    self.reformatted_input += f"1 × {char}"
+            elif prev_char in "+-" and char == "(":
+                if prev_char == "+":
+                    self.reformatted_input += f" 1 × {char}"
                 else:
-                    self.reformatted_input = f"{self.reformatted_input[:-1]}+ -1 × {self.input[i]}"
-            elif len(self.reformatted_input) == 1 and prev_elem in "+-":
-                if self.input[i] in "1234567890.":
-                    self.reformatted_input = f"{self.reformatted_input}{self.input[i]}"
-                else:
-                    self.reformatted_input = f"{self.reformatted_input} {self.input[i]}"
-            elif prev_elem in "()" and self.input[i] in "+-":
-                self.reformatted_input = f"{self.reformatted_input} {self.input[i]}"
-            elif prev_prev_elem == "(" and prev_elem in "+-" and self.input[i] in "1234567890.":
-                self.reformatted_input = f"{self.reformatted_input}{self.input[i]}"
-            elif prev_elem in "1234567890" and self.input[i] in "1234567890.":
-                self.reformatted_input = f"{self.reformatted_input}{self.input[i]}"
-            elif prev_elem == "." and self.input[i] in "1234567890":
-                self.reformatted_input = f"{self.reformatted_input}{self.input[i]}"
-            elif prev_elem in "1234567890" and self.input[i] in "+-×÷)":
-                self.reformatted_input = f"{self.reformatted_input} {self.input[i]}"
-            elif prev_elem in "+-×÷(" and self.input[i] in "1234567890.":
-                self.reformatted_input = f"{self.reformatted_input} {self.input[i]}"
-            elif prev_elem in "1234567890" and self.input[i] == "(":
-                self.reformatted_input = f"{self.reformatted_input} × {self.input[i]}"
-            elif prev_elem == ")" and self.input[i] in "1234567890.":
-                self.reformatted_input = f"{self.reformatted_input} × {self.input[i]}"
+                    self.reformatted_input += f"+ -1 × {char}"
+            elif prev_prev_char == "(" and prev_char in "+-" and char in "1234567890.":
+                self.reformatted_input += char
+            elif prev_char in "1234567890" and char in "1234567890.":
+                self.reformatted_input += char
+            elif prev_char == "." and char in "1234567890":
+                self.reformatted_input += char
+            elif prev_char in "1234567890" and char == "(":
+                self.reformatted_input += f" × {char}"
+            elif prev_char == ")" and char in "1234567890.":
+                self.reformatted_input += f" × {char}"
             else:
-                self.reformatted_input = f"{self.reformatted_input} {self.input[i]}"
+                self.reformatted_input += f" {char}"
 
-            prev_prev_elem = prev_elem
-            prev_elem = self.input[i]
+            prev_prev_char = prev_char
+            prev_char = char
 
     def tokenize_input(self):
         """Tokenizes the given mathematical expression into a list of tokens.
@@ -148,9 +145,8 @@ class Calculator:
                     if operator in "(":
                         self.operator_stack.pop()
                         break
-                    else:
-                        self.operator_stack.pop()
-                        self.output_queue.append(operator)
+                    self.operator_stack.pop()
+                    self.output_queue.append(operator)
             else:
                 self.output_queue.append(token)
 
@@ -173,18 +169,18 @@ class Calculator:
                 second_number = solution.pop()
                 first_number = solution.pop()
 
-            if output == "+":
-                number_after_addition = first_number + second_number
-                solution.append(number_after_addition)
-            elif output == "-":
-                number_after_subtraction = first_number - second_number
-                solution.append(number_after_subtraction)   
-            elif output == "×":
-                number_after_multiplication = first_number * second_number
-                solution.append(number_after_multiplication)
-            elif output == "÷":
-                number_after_division = first_number / second_number
-                solution.append(number_after_division)
+                if output == "+":
+                    number_after_addition = first_number + second_number
+                    solution.append(number_after_addition)
+                elif output == "-":
+                    number_after_subtraction = first_number - second_number
+                    solution.append(number_after_subtraction)
+                elif output == "×":
+                    number_after_multiplication = first_number * second_number
+                    solution.append(number_after_multiplication)
+                elif output == "÷":
+                    number_after_division = first_number / second_number
+                    solution.append(number_after_division)
 
         solution = solution[0]
 
