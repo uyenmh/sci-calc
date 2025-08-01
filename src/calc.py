@@ -1,24 +1,19 @@
+import re
+
 class Calculator:
     """A class that calculates the solution to the given mathematical expression
         and returns it as an integer.
     """
-    def __init__(self, user_input=""):
-        """The class constructor. Tokenizes the infix into RPN.
-
-        Args:
-            user_input (str): The mathematical expression given by the user.
+    def __init__(self):
+        """The class constructor. Initializes the calculator.
         """
-        self.input = user_input
+        self.input = ""
         self.reformatted_input = ""
         self.output_queue = []
         self.operator_stack = []
         self.tokens = []
         self.left_parenthesis = 0
         self.right_parenthesis = 0
-
-        self.reformat_input()
-        self.tokenize_input()
-        self.convert_infix_to_rpn()
 
     def insert_input(self, user_input):
         """Tokenizes the infix into RPN.
@@ -47,6 +42,8 @@ class Calculator:
             str: An error message if there is one, otherwise nothing.
         """
         message = ""
+        pattern = r'(\d?+\.\d+|\d+|[()+\-×÷])'
+        temp_tokens = re.findall(pattern, current_input)
 
         if current_input:
             if current_input[-1] in "+-×÷" and addition_to_input in "+-×÷":
@@ -61,6 +58,11 @@ class Calculator:
                 message = "The multiplication sign is not valid after left parenthesis."
             elif current_input[-1] == "(" and addition_to_input == "÷":
                 message = "The division sign is not valid after left parenthesis."
+            elif (
+                (current_input[-1] == "." and addition_to_input == ".")
+                or ("." in temp_tokens[-1] and addition_to_input == ".")
+            ):
+                message = "Invalid number. A number can only contain one dot."
         elif not current_input and addition_to_input in "×÷":
             if addition_to_input == "×":
                 message = "The expression cannot start with a multiplication sign."
@@ -139,7 +141,7 @@ class Calculator:
             elif token == ")":
                 while len(self.operator_stack) > 0:
                     operator = self.operator_stack[-1]
-                    if operator in "(":
+                    if operator == "(":
                         self.operator_stack.pop()
                         break
                     self.operator_stack.pop()

@@ -30,7 +30,7 @@ class CalculatorUI:
         self.entry.grid(row=0, column=0, columnspan=3, sticky="we")
 
         button_style = ttk.Style()
-        button_style.configure("my.TButton", font=("Montserrat", 10))
+        button_style.configure("my.TButton", font=("Montserrat", 13))
 
         no1_button = ttk.Button(mainframe, style="my.TButton", text="1", command=lambda: self.add_to_entry("1"))
         no2_button = ttk.Button(mainframe, style="my.TButton", text="2", command=lambda: self.add_to_entry("2"))
@@ -87,6 +87,14 @@ class CalculatorUI:
             addition_to_input (str): The given character that will be added onto the input field.
         """
         current_input = self.entry.get()
+
+        if addition_to_input == ".":
+            if (
+                not current_input
+                or (current_input and current_input[-1] not in "1234567890.")
+            ):
+                addition_to_input = "0."
+
         message = self.calc.check_validity_of_input(current_input, addition_to_input)
 
         if message != "":
