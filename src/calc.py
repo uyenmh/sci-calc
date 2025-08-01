@@ -58,6 +58,8 @@ class Calculator:
                 message = "The multiplication sign is not valid after left parenthesis."
             elif current_input[-1] == "(" and addition_to_input == "÷":
                 message = "The division sign is not valid after left parenthesis."
+            elif current_input[-1] in "+-×÷" and addition_to_input == ")":
+                message = "A right parenthesis is not valid after an operator."
             elif (
                 (current_input[-1] == "." and addition_to_input == ".")
                 or ("." in temp_tokens[-1] and addition_to_input == ".")
