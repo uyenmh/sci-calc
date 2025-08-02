@@ -14,6 +14,9 @@ Syötteet, joilla testaus tehtiin:
 - tyhjät sulkeet
 - kertomerkki vasemman sulun jälkeen
 - jakomerkki vasemman sulun jälkeen
+- oikea sulku operaattorin jälkeen
+- kaksi peräkkäistä pistettä lukuarvossa
+- kaksi ei-peräkkäistä pistettä lukuarvossa
 - kertomerkki lausekkeen ensimmäisenä
 - jakomerkki lausekkeen ensimmäisenä
 - oikea sulku ennen vasenta sulkua
@@ -27,20 +30,20 @@ Metodia ollaan testattu niin, että ensin tarkistetaan, millaisia arvoja alussa 
 	
 ### reformat_input()
 
-Metodia ollaan testattu monipuolisilla syötteillä. Testeissä ollaan käytetty sekä kokonais- että desimaalilukuja. Testisyötteissä ollaan käytetty myös sulkeita ja kaikkia operaattoreita ainakin kerran. Testit tarkistavat, että syöte uudelleenmuotoillaan oikein. Testeissä hyödynnetään unittestin self.assertEqual-metodia.
+Metodia ollaan testattu monipuolisilla syötteillä. Testeissä ollaan käytetty sekä kokonais- että desimaalilukuja. Testisyötteissä ollaan käytetty myös sulkeita, kaikkia operaattoreita ainakin kerran ja laskimessa olevia funktioita. Testit tarkistavat, että syöte uudelleenmuotoillaan oikein. Testeissä hyödynnetään unittestin self.assertEqual-metodia.
 
 ### tokenize_input()
 
-Metodia ollaan testattu tällä hetkellä vain yhdellä syötteellä. Haluttu tokenisaatio ollaan kirjoitettu testiin manuaalisesti. Testissä hyödynnetään unittestin self.assertEqual-metodia.
+Metodia ollaan testattu kokonaisluvuilla, desimaaliluvuilla ja funktioilla. Haluttu tokenisaatio ollaan kirjoitettu testiin manuaalisesti. Testissä hyödynnetään unittestin self.assertEqual-metodia.
 
 
 ### convert_infix_to_rpn()
 
-Metodia ollaan testattu tällä hetkellä vain yhdellä syötteellä. Haluttu RPN-muoto ollaan selvitetty manuaalisesti. Testissä hyödynnetään unittestin self.assertEqual-metodia.
+Metodia ollaan testattu erilaisilla lukuarvoilla ja joillakin funktioilla. Haluttu RPN-muoto ollaan selvitetty manuaalisesti. Testissä hyödynnetään unittestin self.assertEqual-metodia.
 
 ### calculate()
 
-Metodia ollaan testattu tällä hetkellä vain yhdellä syötteellä. Haluttu ratkaisu on laskettu erillisellä laskimella. Testissä hyödynnetään unittestin self.assertEqual-metodia.
+Metodia ollaan testattu niin, että haluttu ratkaisu on laskettu pythonia hyödyntäen. Testit vertaavat saatua arvoa ja haluttua arvoa toisiinsa. Testeissä on käytetty kokonaislukuja, desimaalilukuja ja funktioita. Myös virheviestejä ollaan testattu. Testissä hyödynnetään unittestin self.assertEqual-metodia.
 
 
 ## Testien toisto
@@ -60,4 +63,4 @@ Komento generoi tällöin testikattavuusraportin komentoriville.
 
 ## Testikattavuusraportti
 
-![Testikattavuusraportti](./kuvat/testikattavuusraportti.png)
+![Testikattavuusraportti](./kuvat/testikattavuusraportti2.png)

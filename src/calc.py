@@ -69,7 +69,7 @@ class Calculator:
                 (current_input[-1] == "." and addition_to_input == ".")
                 or ("." in temp_tokens[-1] and addition_to_input == ".")
             ):
-                message = "Invalid number. A number can only contain one dot."
+                message = "Enter a valid number. A number can only contain one dot."
         elif not current_input and addition_to_input in "×÷":
             if addition_to_input == "×":
                 message = "The expression can't start with a multiplication sign."
@@ -112,7 +112,7 @@ class Calculator:
                 self.reformatted_input += char
             elif prev_char in "1234567890" and char == "(":
                 self.reformatted_input += f" × {char}"
-            elif prev_char == ")" and char in "1234567890.":
+            elif prev_char == ")" and char in "1234567890.sct":
                 self.reformatted_input += f" × {char}"
             elif prev_char in "1234567890." and char == "√":
                 self.reformatted_input += f" × {char}"
@@ -239,7 +239,7 @@ class Calculator:
                         trig_function = trig_functions[output]
 
                         if output in ("sin⁻¹","cos⁻¹") and (number < -1 or number > 1):
-                            return f"{output} function requires a value between -1 and 1."
+                            return "sin⁻¹ and cos⁻¹ functions require a value between -1 and 1."
 
                         if self.radians is True:
                             number_after_trig_function = trig_function(number)
