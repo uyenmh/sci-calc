@@ -26,8 +26,8 @@ class CalculatorUI:
         mainframe = ttk.Frame(self.root)
         mainframe.pack()
 
-        self.entry = tk.Entry(mainframe, state="disabled")
-        self.entry.grid(row=0, column=0, columnspan=3, sticky="we")
+        self.entry = tk.Entry(mainframe, state="disabled", font="Montserrat")
+        self.entry.grid(row=0, column=0, columnspan=4, sticky="we")
 
         button_style = ttk.Style()
         button_style.configure("my.TButton", font=("Montserrat", 13))
@@ -56,6 +56,8 @@ class CalculatorUI:
         start_parenthesis_button = ttk.Button(mainframe, style="my.TButton", text="(", command=lambda: self.add_to_entry("("))
         end_parenthesis_button = ttk.Button(mainframe, style="my.TButton", text=")", command=lambda: self.add_to_entry(")"))
 
+        sqrt_button = ttk.Button(mainframe, style="my.TButton", text="√", command=lambda: self.add_to_entry("√("))
+
         no1_button.grid(row=4, column=0)
         no2_button.grid(row=4, column=1)
         no3_button.grid(row=4, column=2)
@@ -69,7 +71,7 @@ class CalculatorUI:
 
         clear_button.grid(row=1, column=0)
         delete_button.grid(row=5, column=0)
-        enter_button.grid(row=0, column=3)
+        enter_button.grid(row=0, column=4)
 
         plus_button.grid(row=4, column=3)
         minus_button.grid(row=3, column=3)
@@ -79,6 +81,8 @@ class CalculatorUI:
         dot_button.grid(row=5, column=2)
         start_parenthesis_button.grid(row=1, column=1)
         end_parenthesis_button.grid(row=1, column=2)
+
+        sqrt_button.grid(row=1, column=4)
 
     def add_to_entry(self, addition_to_input):
         """Adds the given character into the input field of the calculator if the character is valid.
@@ -98,7 +102,7 @@ class CalculatorUI:
         message = self.calc.check_validity_of_input(current_input, addition_to_input)
 
         if message != "":
-            messagebox.showerror(title="Error", message=f"Invalid format: {message}")
+            messagebox.showerror(title="Error", message=f"Invalid input: {message}")
         else:
             self.entry.config(state="normal")
             self.entry.insert(tk.END, addition_to_input)
@@ -117,24 +121,36 @@ class CalculatorUI:
     def delete_last_char(self):
         """Deletes the last character from input field of the calculator.
         """
-        self.entry.config(state="normal")
-        self.entry.delete(self.entry.index(tk.END) - 1)
-        self.entry.config(state="disabled")
+        current_input = self.entry.get()
 
-        last_char = self.entry.get()[-1]
-        if last_char == "(":
-            self.calc.left_parenthesis -= 1
-        elif last_char == ")":
-            self.calc.right_parenthesis -= 1
+        if current_input:
+            if len(current_input) >= 2 and current_input[-2:] == "√(":
+                self.entry.config(state="normal")
+                self.entry.delete(self.entry.index(tk.END) - 2, tk.END)
+                self.entry.config(state="disabled")
+                self.calc.left_parenthesis -= 1
+
+                return
+            elif current_input[-1] == "(":
+                self.calc.left_parenthesis -= 1
+            elif current_input[-1] == ")":
+                self.calc.right_parenthesis -= 1
+
+            self.entry.config(state="normal")
+            self.entry.delete(self.entry.index(tk.END) - 1)
+            self.entry.config(state="disabled")
 
     def calculate_input(self):
         """Calculates the solution to the given input (mathematical expression).
         """
         input = self.entry.get()
         self.calc.insert_input(input)
-        solution = self.calc.calculate()
+        solution_or_error_msg = self.calc.calculate()
 
-        self.entry.config(state="normal")
-        self.entry.delete(0, tk.END)
-        self.entry.insert(tk.END, solution)
-        self.entry.config(state="disabled")
+        if type(solution_or_error_msg) == str:
+            messagebox.showerror(title="Error", message=f"Invalid input: {solution_or_error_msg}")
+        else:
+            self.entry.config(state="normal")
+            self.entry.delete(0, tk.END)
+            self.entry.insert(tk.END, solution_or_error_msg)
+            self.entry.config(state="disabled")

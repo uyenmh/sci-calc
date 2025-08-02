@@ -1,4 +1,5 @@
 import re
+import math
 
 class Calculator:
     """A class that calculates the solution to the given mathematical expression
@@ -42,6 +43,7 @@ class Calculator:
             str: An error message if there is one, otherwise nothing.
         """
         message = ""
+
         pattern = r'(\d?+\.\d+|\d+|[()+\-×÷])'
         temp_tokens = re.findall(pattern, current_input)
 
@@ -67,15 +69,15 @@ class Calculator:
                 message = "Invalid number. A number can only contain one dot."
         elif not current_input and addition_to_input in "×÷":
             if addition_to_input == "×":
-                message = "The expression cannot start with a multiplication sign."
+                message = "The expression can't start with a multiplication sign."
             else:
-                message = "The expression cannot start with a division sign."
+                message = "The expression can't start with a division sign."
 
         if self.left_parenthesis <= self.right_parenthesis and addition_to_input == ")":
             message = "Insert a left parenthesis first."
 
         if message == "":
-            if addition_to_input == "(":
+            if addition_to_input == "(" or addition_to_input == "√(":
                 self.left_parenthesis += 1
             elif (
                 addition_to_input == ")"
@@ -109,11 +111,18 @@ class Calculator:
                 self.reformatted_input += f" × {char}"
             elif prev_char == ")" and char in "1234567890.":
                 self.reformatted_input += f" × {char}"
+            elif prev_char in "1234567890." and char == "√":
+                self.reformatted_input += f" × {char}"
             else:
                 self.reformatted_input += f" {char}"
 
             prev_prev_char = prev_char
             prev_char = char
+
+        if self.left_parenthesis > self.right_parenthesis and prev_char in "1234567890.":
+            missing_parenthesis = self.left_parenthesis - self.right_parenthesis
+            self.reformatted_input += missing_parenthesis*" )"
+            self.right_parenthesis += missing_parenthesis
 
     def tokenize_input(self):
         """Tokenizes the given mathematical expression into a list of tokens.
@@ -123,33 +132,41 @@ class Calculator:
     def convert_infix_to_rpn(self):
         """Converts the given mathematical expression (from token format) into RPN.
         """
-        precedence = {"+": 1,
+        precedence = {"(": 0,
+                      "+": 1,
                       "-": 1,
                       "×": 2,
                       "÷": 2,
-                      "(": 3}   
+                      "√": 3
+                      }
 
         for token in self.tokens:
-            if token in "+-×÷":
-                while len(self.operator_stack) > 0:
-                    operator = self.operator_stack[-1]
-                    if precedence[token] > precedence[operator] or operator == "(":
-                        break
-                    self.operator_stack.pop()
-                    self.output_queue.append(operator)
-                self.operator_stack.append(token)
-            elif token == "(":
-                self.operator_stack.append(token)
-            elif token == ")":
-                while len(self.operator_stack) > 0:
-                    operator = self.operator_stack[-1]
-                    if operator == "(":
+            match token:
+                case "+" | "-" | "×" | "÷" | "√":
+                    while len(self.operator_stack) > 0:
+                        operator = self.operator_stack[-1]
+                        if precedence[token] > precedence[operator] or operator == "(":
+                            break
                         self.operator_stack.pop()
-                        break
-                    self.operator_stack.pop()
-                    self.output_queue.append(operator)
-            else:
-                self.output_queue.append(token)
+                        self.output_queue.append(operator)
+                    self.operator_stack.append(token)
+                case "(":
+                    self.operator_stack.append(token)
+                case ")":
+                    while len(self.operator_stack) > 0:
+                        operator = self.operator_stack[-1]
+                        if operator == "(":
+                            self.operator_stack.pop()
+                            break
+                        self.operator_stack.pop()
+                        self.output_queue.append(operator)
+                    if len(self.operator_stack) > 0:
+                        operator = self.operator_stack[-1]
+                        if operator == "√":
+                            self.operator_stack.pop()
+                            self.output_queue.append(operator)
+                case _:
+                    self.output_queue.append(token)
 
         while len(self.operator_stack) > 0:
             operator = self.operator_stack.pop()
@@ -163,9 +180,23 @@ class Calculator:
         """
         solution = []
 
+        match self.tokens[-1]:
+            case "+" | "-" | "×" | "÷":
+                return "The expression can't end with an operator."
+            case "(":
+                return "Parenthesis cannot be left empty."
+
         for output in self.output_queue:
-            if output not in "+-×÷":
+            if output not in "+-×÷√":
                 solution.append(float(output))
+            elif output == "√":
+                number = solution.pop()
+
+                if number < 0:
+                    return "The square root of a negative number can't be calculated."
+
+                number_after_sqrt = math.sqrt(number)
+                solution.append(number_after_sqrt)
             else:
                 second_number = solution.pop()
                 first_number = solution.pop()
