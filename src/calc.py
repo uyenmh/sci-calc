@@ -16,7 +16,7 @@ class Calculator:
         self.left_parenthesis = 0
         self.right_parenthesis = 0
         self.operators = ["+", "-", "×", "÷"]
-        self.functions = ["√", "sin", "cos", "tan"]
+        self.functions = ["√", "sin", "cos", "tan", "sin⁻¹", "cos⁻¹", "tan⁻¹"]
         self.radians = True
 
     def insert_input(self, user_input):
@@ -122,6 +122,10 @@ class Calculator:
                 self.reformatted_input += char
             elif prev_prev_char in "sct" and prev_char in "ioa" and char in "ns":
                 self.reformatted_input += char
+            elif prev_prev_char in "ioa" and prev_char in "ns" and char == "⁻":
+                self.reformatted_input += char
+            elif prev_prev_char in "ns" and prev_char == "⁻" and char == "¹":
+                self.reformatted_input += char
             else:
                 self.reformatted_input += f" {char}"
 
@@ -149,12 +153,15 @@ class Calculator:
                       "√": 3,
                       "sin": 3,
                       "cos": 3,
-                      "tan": 3
+                      "tan": 3,
+                      "sin⁻¹": 3,
+                      "cos⁻¹": 3,
+                      "tan⁻¹": 3
                       }
 
         for token in self.tokens:
             match token:
-                case "+" | "-" | "×" | "÷" | "√" | "sin" | "cos" | "tan":
+                case "+" | "-" | "×" | "÷" | "√" | "sin" | "cos" | "tan" | "sin⁻¹" | "cos⁻¹" | "tan⁻¹":
                     while len(self.operator_stack) > 0:
                         operator = self.operator_stack[-1]
                         if precedence[token] > precedence[operator] or operator == "(":
@@ -185,10 +192,11 @@ class Calculator:
             self.output_queue.append(operator)
 
     def calculate(self):
-        """Calculates the solution of the given mathematical expression from the RPN.
+        """Evaluates the given mathematical expression in RPN.
 
         Returns:
-            int: The solution of the given mathematical expression.
+            int or str: The result of the given mathematical expression if valid,
+            or an error message otherwise.
         """
         solution = []
 
@@ -197,6 +205,15 @@ class Calculator:
                 return "The expression can't end with an operator."
             case "(":
                 return "Parenthesis cannot be left empty."
+
+        trig_functions = {
+            "sin": math.sin,
+            "cos": math.cos,
+            "tan": math.tan,
+            "sin⁻¹": math.asin,
+            "cos⁻¹": math.acos,
+            "tan⁻¹": math.atan
+        }
 
         for output in self.output_queue:
             if output not in self.operators and output not in self.functions:
@@ -210,24 +227,25 @@ class Calculator:
 
                         number_after_sqrt = math.sqrt(number)
                         solution.append(number_after_sqrt)
-                    case "sin":
-                        if self.radians == True:
-                            number_after_sin = math.sin(number)
+                    case "sin" | "cos" | "tan":
+                        trig_function = trig_functions[output]
+
+                        if self.radians is True:
+                            number_after_trig_function = trig_function(number)
                         else:
-                            number_after_sin = math.sin(math.radians(number))
-                        solution.append(number_after_sin)
-                    case "cos":
-                        if self.radians == True:
-                            number_after_cos = math.cos(number)
+                            number_after_trig_function = trig_function(math.radians(number))
+                        solution.append(number_after_trig_function)
+                    case "sin⁻¹" | "cos⁻¹" | "tan⁻¹":
+                        trig_function = trig_functions[output]
+
+                        if output in ("sin⁻¹","cos⁻¹") and (number < -1 or number > 1):
+                            return f"{output} function requires a value between -1 and 1."
+
+                        if self.radians is True:
+                            number_after_trig_function = trig_function(number)
                         else:
-                            number_after_cos = math.cos(math.radians(number))
-                        solution.append(number_after_cos)
-                    case "tan":
-                        if self.radians == True:
-                            number_after_tan = math.tan(number)
-                        else:
-                            number_after_tan = math.tan(math.radians(number))
-                        solution.append(number_after_tan)
+                            number_after_trig_function = math.degrees(trig_function(number))
+                        solution.append(number_after_trig_function)
             else:
                 second_number = solution.pop()
                 first_number = solution.pop()

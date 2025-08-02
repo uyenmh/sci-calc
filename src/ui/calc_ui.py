@@ -22,12 +22,13 @@ class CalculatorUI:
         """
         self.root.title("Scientific Calculator")
         self.root.geometry("700x350")
+        self.root.option_add('*Dialog.msg.font', 'Montserrat, 12')
 
         mainframe = ttk.Frame(self.root)
         mainframe.pack()
 
         self.entry = tk.Entry(mainframe, state="disabled", font="Montserrat")
-        self.entry.grid(row=0, column=0, columnspan=4, sticky="we")
+        self.entry.grid(row=0, column=0, columnspan=5, sticky="we")
 
         button_style = ttk.Style()
         button_style.configure("my.TButton", font=("Montserrat", 13))
@@ -61,6 +62,9 @@ class CalculatorUI:
         cos_button = ttk.Button(mainframe, style="my.TButton", text="cos", command=lambda: self.add_to_entry("cos("))
         tan_button = ttk.Button(mainframe, style="my.TButton", text="tan", command=lambda: self.add_to_entry("tan("))
         self.rad_deg_button = ttk.Button(mainframe, style="my.TButton", text="deg", command=lambda: self.toggle_radians_and_degrees())
+        asin_button = ttk.Button(mainframe, style="my.TButton", text="sin⁻¹", command=lambda: self.add_to_entry("sin⁻¹("))
+        acos_button = ttk.Button(mainframe, style="my.TButton", text="cos⁻¹", command=lambda: self.add_to_entry("cos⁻¹("))
+        atan_button = ttk.Button(mainframe, style="my.TButton", text="tan⁻¹", command=lambda: self.add_to_entry("tan⁻¹("))
 
         no1_button.grid(row=4, column=0)
         no2_button.grid(row=4, column=1)
@@ -75,7 +79,7 @@ class CalculatorUI:
 
         clear_button.grid(row=1, column=0)
         delete_button.grid(row=5, column=0)
-        enter_button.grid(row=0, column=4)
+        enter_button.grid(row=0, column=5)
 
         plus_button.grid(row=4, column=3)
         minus_button.grid(row=3, column=3)
@@ -91,6 +95,9 @@ class CalculatorUI:
         cos_button.grid(row=3, column=4)
         tan_button.grid(row=4, column=4)
         self.rad_deg_button.grid(row=5, column=4)
+        asin_button.grid(row=2, column=5)
+        acos_button.grid(row=3, column=5)
+        atan_button.grid(row=4, column=5)
 
     def add_to_entry(self, addition_to_input):
         """Adds the given character into the input field of the calculator if the character is valid.
