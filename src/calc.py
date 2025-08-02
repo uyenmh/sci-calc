@@ -15,6 +15,9 @@ class Calculator:
         self.tokens = []
         self.left_parenthesis = 0
         self.right_parenthesis = 0
+        self.operators = ["+", "-", "×", "÷"]
+        self.functions = ["√", "sin", "cos", "tan"]
+        self.radians = True
 
     def insert_input(self, user_input):
         """Tokenizes the infix into RPN.
@@ -77,7 +80,7 @@ class Calculator:
             message = "Insert a left parenthesis first."
 
         if message == "":
-            if addition_to_input == "(" or addition_to_input == "√(":
+            if addition_to_input == "(" or addition_to_input[:-1] in self.functions:
                 self.left_parenthesis += 1
             elif (
                 addition_to_input == ")"
@@ -113,6 +116,12 @@ class Calculator:
                 self.reformatted_input += f" × {char}"
             elif prev_char in "1234567890." and char == "√":
                 self.reformatted_input += f" × {char}"
+            elif prev_char in "1234567890." and char in "sct":
+                self.reformatted_input += f" × {char}"
+            elif prev_char in "sct" and char in "ioa":
+                self.reformatted_input += char
+            elif prev_prev_char in "sct" and prev_char in "ioa" and char in "ns":
+                self.reformatted_input += char
             else:
                 self.reformatted_input += f" {char}"
 
@@ -137,12 +146,15 @@ class Calculator:
                       "-": 1,
                       "×": 2,
                       "÷": 2,
-                      "√": 3
+                      "√": 3,
+                      "sin": 3,
+                      "cos": 3,
+                      "tan": 3
                       }
 
         for token in self.tokens:
             match token:
-                case "+" | "-" | "×" | "÷" | "√":
+                case "+" | "-" | "×" | "÷" | "√" | "sin" | "cos" | "tan":
                     while len(self.operator_stack) > 0:
                         operator = self.operator_stack[-1]
                         if precedence[token] > precedence[operator] or operator == "(":
@@ -162,7 +174,7 @@ class Calculator:
                         self.output_queue.append(operator)
                     if len(self.operator_stack) > 0:
                         operator = self.operator_stack[-1]
-                        if operator == "√":
+                        if operator in self.functions:
                             self.operator_stack.pop()
                             self.output_queue.append(operator)
                 case _:
@@ -187,32 +199,51 @@ class Calculator:
                 return "Parenthesis cannot be left empty."
 
         for output in self.output_queue:
-            if output not in "+-×÷√":
+            if output not in self.operators and output not in self.functions:
                 solution.append(float(output))
-            elif output == "√":
+            elif output in self.functions:
                 number = solution.pop()
+                match output:
+                    case "√":
+                        if number < 0:
+                            return "The square root of a negative number can't be calculated."
 
-                if number < 0:
-                    return "The square root of a negative number can't be calculated."
-
-                number_after_sqrt = math.sqrt(number)
-                solution.append(number_after_sqrt)
+                        number_after_sqrt = math.sqrt(number)
+                        solution.append(number_after_sqrt)
+                    case "sin":
+                        if self.radians == True:
+                            number_after_sin = math.sin(number)
+                        else:
+                            number_after_sin = math.sin(math.radians(number))
+                        solution.append(number_after_sin)
+                    case "cos":
+                        if self.radians == True:
+                            number_after_cos = math.cos(number)
+                        else:
+                            number_after_cos = math.cos(math.radians(number))
+                        solution.append(number_after_cos)
+                    case "tan":
+                        if self.radians == True:
+                            number_after_tan = math.tan(number)
+                        else:
+                            number_after_tan = math.tan(math.radians(number))
+                        solution.append(number_after_tan)
             else:
                 second_number = solution.pop()
                 first_number = solution.pop()
-
-                if output == "+":
-                    number_after_addition = first_number + second_number
-                    solution.append(number_after_addition)
-                elif output == "-":
-                    number_after_subtraction = first_number - second_number
-                    solution.append(number_after_subtraction)
-                elif output == "×":
-                    number_after_multiplication = first_number * second_number
-                    solution.append(number_after_multiplication)
-                elif output == "÷":
-                    number_after_division = first_number / second_number
-                    solution.append(number_after_division)
+                match output:
+                    case "+":
+                        number_after_addition = first_number + second_number
+                        solution.append(number_after_addition)
+                    case "-":
+                        number_after_subtraction = first_number - second_number
+                        solution.append(number_after_subtraction)
+                    case "×":
+                        number_after_multiplication = first_number * second_number
+                        solution.append(number_after_multiplication)
+                    case "÷":
+                        number_after_division = first_number / second_number
+                        solution.append(number_after_division)
 
         solution = solution[0]
 

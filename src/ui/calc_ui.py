@@ -57,6 +57,10 @@ class CalculatorUI:
         end_parenthesis_button = ttk.Button(mainframe, style="my.TButton", text=")", command=lambda: self.add_to_entry(")"))
 
         sqrt_button = ttk.Button(mainframe, style="my.TButton", text="√", command=lambda: self.add_to_entry("√("))
+        sin_button = ttk.Button(mainframe, style="my.TButton", text="sin", command=lambda: self.add_to_entry("sin("))
+        cos_button = ttk.Button(mainframe, style="my.TButton", text="cos", command=lambda: self.add_to_entry("cos("))
+        tan_button = ttk.Button(mainframe, style="my.TButton", text="tan", command=lambda: self.add_to_entry("tan("))
+        self.rad_deg_button = ttk.Button(mainframe, style="my.TButton", text="deg", command=lambda: self.toggle_radians_and_degrees())
 
         no1_button.grid(row=4, column=0)
         no2_button.grid(row=4, column=1)
@@ -83,6 +87,10 @@ class CalculatorUI:
         end_parenthesis_button.grid(row=1, column=2)
 
         sqrt_button.grid(row=1, column=4)
+        sin_button.grid(row=2, column=4)
+        cos_button.grid(row=3, column=4)
+        tan_button.grid(row=4, column=4)
+        self.rad_deg_button.grid(row=5, column=4)
 
     def add_to_entry(self, addition_to_input):
         """Adds the given character into the input field of the calculator if the character is valid.
@@ -154,3 +162,13 @@ class CalculatorUI:
             self.entry.delete(0, tk.END)
             self.entry.insert(tk.END, solution_or_error_msg)
             self.entry.config(state="disabled")
+
+    def toggle_radians_and_degrees(self):
+        button_status = self.rad_deg_button.cget("text")
+
+        if button_status == "deg":
+            self.rad_deg_button.configure(text="rad")
+            self.calc.radians = False
+        else:
+            self.rad_deg_button.configure(text="deg")
+            self.calc.radians = True
