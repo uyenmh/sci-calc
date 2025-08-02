@@ -6,7 +6,22 @@ from calc import Calculator
 class TestCalculator(unittest.TestCase):
     def setUp(self):
         self.input = "-4÷2+(6-2)×1"
-        self.calc = Calculator(self.input)
+        self.calc = Calculator()
+        self.calc.insert_input(self.input)
+
+    def test_insert_input(self):
+        self.assertEqual(self.calc.input, self.input)
+        self.assertEqual(self.calc.reformatted_input, "-4 ÷ 2 + ( 6 - 2 ) × 1")
+        self.assertEqual(self.calc.tokens, ["-4", "÷", "2", "+", "(", "6", "-", "2", ")", "×", "1"])
+        self.assertEqual(self.calc.output_queue, ["-4", "2", "÷", "6", "2", "-", "1", "×", "+"])
+
+        new_input = "1+2+3"
+        self.calc.insert_input(new_input)
+
+        self.assertEqual(self.calc.input, new_input)
+        self.assertEqual(self.calc.reformatted_input, "1 + 2 + 3")
+        self.assertEqual(self.calc.tokens, ["1", "+", "2", "+", "3"])
+        self.assertEqual(self.calc.output_queue, ["1", "2", "+", "3", "+"])
 
     def test_check_validity_of_input_using_consecutive_operators(self):
         message = self.calc.check_validity_of_input(self.input, "+")
@@ -115,20 +130,6 @@ class TestCalculator(unittest.TestCase):
             self.input += ")"
 
         self.assertEqual(self.calc.right_parenthesis, 2)
-
-    def test_insert_input(self):
-        self.assertEqual(self.calc.input, self.input)
-        self.assertEqual(self.calc.reformatted_input, "-4 ÷ 2 + ( 6 - 2 ) × 1")
-        self.assertEqual(self.calc.tokens, ["-4", "÷", "2", "+", "(", "6", "-", "2", ")", "×", "1"])
-        self.assertEqual(self.calc.output_queue, ["-4", "2", "÷", "6", "2", "-", "1", "×", "+"])
-
-        new_input = "1+2+3"
-        self.calc.insert_input(new_input)
-
-        self.assertEqual(self.calc.input, new_input)
-        self.assertEqual(self.calc.reformatted_input, "1 + 2 + 3")
-        self.assertEqual(self.calc.tokens, ["1", "+", "2", "+", "3"])
-        self.assertEqual(self.calc.output_queue, ["1", "2", "+", "3", "+"])
 
     def test_reformat_input_with_plusminus_around_parenthesis(self):
         self.input = "-(+3-2)+((5+3)-4)"
