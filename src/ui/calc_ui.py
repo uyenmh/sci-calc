@@ -21,7 +21,7 @@ class CalculatorUI:
         """Configures the elements of the calculator window. 
         """
         self.root.title("Scientific Calculator")
-        self.root.geometry("700x350")
+        self.root.geometry("800x350")
         self.root.option_add('*Dialog.msg.font', 'Montserrat, 12')
 
         mainframe = ttk.Frame(self.root)
@@ -66,6 +66,21 @@ class CalculatorUI:
         acos_button = ttk.Button(mainframe, style="my.TButton", text="cos⁻¹", command=lambda: self.add_to_entry("cos⁻¹("))
         atan_button = ttk.Button(mainframe, style="my.TButton", text="tan⁻¹", command=lambda: self.add_to_entry("tan⁻¹("))
 
+        min_button = ttk.Button(mainframe, style="my.TButton", text="min", command=lambda: self.add_to_entry("min("))
+        max_button = ttk.Button(mainframe, style="my.TButton", text="max", command=lambda: self.add_to_entry("max("))
+        comma_button = ttk.Button(mainframe, style="my.TButton", text=",", command=lambda: self.add_to_entry(","))
+
+        a_button = ttk.Button(mainframe, style="my.TButton", text="a", command=lambda: self.add_to_entry("a"))
+        b_button = ttk.Button(mainframe, style="my.TButton", text="b", command=lambda: self.add_to_entry("b"))
+        c_button = ttk.Button(mainframe, style="my.TButton", text="c", command=lambda: self.add_to_entry("c"))
+        d_button = ttk.Button(mainframe, style="my.TButton", text="d", command=lambda: self.add_to_entry("d"))
+        e_button = ttk.Button(mainframe, style="my.TButton", text="e", command=lambda: self.add_to_entry("e"))
+        f_button = ttk.Button(mainframe, style="my.TButton", text="f", command=lambda: self.add_to_entry("f"))
+        g_button = ttk.Button(mainframe, style="my.TButton", text="g", command=lambda: self.add_to_entry("g"))
+        h_button = ttk.Button(mainframe, style="my.TButton", text="h", command=lambda: self.add_to_entry("h"))
+        i_button = ttk.Button(mainframe, style="my.TButton", text="i", command=lambda: self.add_to_entry("i"))
+        j_button = ttk.Button(mainframe, style="my.TButton", text="j", command=lambda: self.add_to_entry("j"))
+
         no1_button.grid(row=4, column=0)
         no2_button.grid(row=4, column=1)
         no3_button.grid(row=4, column=2)
@@ -94,10 +109,25 @@ class CalculatorUI:
         sin_button.grid(row=2, column=4)
         cos_button.grid(row=3, column=4)
         tan_button.grid(row=4, column=4)
-        self.rad_deg_button.grid(row=5, column=4)
+        self.rad_deg_button.grid(row=1, column=5)
         asin_button.grid(row=2, column=5)
         acos_button.grid(row=3, column=5)
         atan_button.grid(row=4, column=5)
+
+        min_button.grid(row=5, column=4)
+        max_button.grid(row=5, column=5)
+        comma_button.grid(row=8, column=4)
+
+        a_button.grid(row=7, column=0, pady=(10,0))
+        b_button.grid(row=7, column=1, pady=(10,0))
+        c_button.grid(row=7, column=2, pady=(10,0))
+        d_button.grid(row=7, column=3, pady=(10,0))
+        e_button.grid(row=7, column=4, pady=(10,0))
+        f_button.grid(row=7, column=5, pady=(10,0))
+        g_button.grid(row=8, column=0)
+        h_button.grid(row=8, column=1)
+        i_button.grid(row=8, column=2)
+        j_button.grid(row=8, column=3)
 
     def add_to_entry(self, addition_to_input):
         """Adds the given character into the input field of the calculator if the character is valid.
@@ -132,6 +162,10 @@ class CalculatorUI:
 
         self.calc.left_parenthesis = 0
         self.calc.right_parenthesis = 0
+        self.calc.min_count = 0
+        self.calc.max_count = 0
+        self.calc.commas = 0
+        self.calc.equality_status = False
 
     def delete_last_char(self):
         """Deletes the last character from input field of the calculator.
@@ -146,10 +180,31 @@ class CalculatorUI:
                 self.calc.left_parenthesis -= 1
 
                 return
+            elif len(current_input) >= 4 and current_input[-4:] in [f + "(" for f in self.calc.functions[4:10]]:
+                self.entry.config(state="normal")
+                self.entry.delete(self.entry.index(tk.END) - 4, tk.END)
+                self.entry.config(state="disabled")
+                self.calc.left_parenthesis -= 1
+
+                if current_input[-4:] == "min(":
+                    self.calc.min_count -= 1
+                elif current_input[-4:] == "max(":
+                    self.calc.max_count -= 1
+
+                return
+            elif len(current_input) >= 6 and current_input[-6:] in [f + "(" for f in self.calc.functions[1:4]]:
+                self.entry.config(state="normal")
+                self.entry.delete(self.entry.index(tk.END) - 6, tk.END)
+                self.entry.config(state="disabled")
+                self.calc.left_parenthesis -= 1
+
+                return
             elif current_input[-1] == "(":
                 self.calc.left_parenthesis -= 1
             elif current_input[-1] == ")":
                 self.calc.right_parenthesis -= 1
+            elif current_input[-1] == "=":
+                self.calc.equality_status = False
 
             self.entry.config(state="normal")
             self.entry.delete(self.entry.index(tk.END) - 1)
@@ -162,7 +217,7 @@ class CalculatorUI:
         self.calc.insert_input(input)
         solution_or_error_msg = self.calc.calculate()
 
-        if type(solution_or_error_msg) == str:
+        if type(solution_or_error_msg) == str and "=" not in solution_or_error_msg:
             messagebox.showerror(title="Error", message=f"Invalid input: {solution_or_error_msg}")
         else:
             self.entry.config(state="normal")
