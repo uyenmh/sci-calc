@@ -138,10 +138,8 @@ class CalculatorUI:
         current_input = self.entry.get()
 
         if addition_to_input == ".":
-            if (
-                not current_input
-                or (current_input and current_input[-1] not in "1234567890.")
-            ):
+            if not current_input \
+                 or (current_input and current_input[-1] not in "1234567890."):
                 addition_to_input = "0."
 
         message = self.calc.check_validity_of_input(current_input, addition_to_input)
@@ -205,6 +203,8 @@ class CalculatorUI:
                 self.calc.right_parenthesis -= 1
             elif current_input[-1] == "=":
                 self.calc.equality_status = False
+            elif current_input[-1] == ",":
+                self.calc.commas -= 1
 
             self.entry.config(state="normal")
             self.entry.delete(self.entry.index(tk.END) - 1)
