@@ -7,20 +7,7 @@ Applikaation yksikkötestaamiseen ollaan käytetty Pythonin unittest-moduulia. T
 
 ### check_validity_of_input()
 
-Metodia ollaan testattu niin, että jokaista virheviestiä varten on tehty oma testi. Jokainen testi tarkistaa metodin palauttaman viestin, kun annetaan virheellinen syöte. Testeissä hyödynnetään unittestin self.assertEqual-metodia.
-
-Syötteet, joilla testaus tehtiin:
-- kaksi peräkkäistä operaattoria
-- tyhjät sulkeet
-- kertomerkki vasemman sulun jälkeen
-- jakomerkki vasemman sulun jälkeen
-- oikea sulku operaattorin jälkeen
-- kaksi peräkkäistä pistettä lukuarvossa
-- kaksi ei-peräkkäistä pistettä lukuarvossa
-- kertomerkki lausekkeen ensimmäisenä
-- jakomerkki lausekkeen ensimmäisenä
-- oikea sulku ennen vasenta sulkua
-- oikea sulku lausekkeen ensimmäisenä
+Metodia ollaan testattu niin, että jokaista virheviestiä varten on tehty oma testi. Jokainen testi tarkistaa metodin palauttaman viestin, kun annetaan virheellinen syöte. Metodia ollaan testattu monipuolisilla syötteillä. Testeissä hyödynnetään unittestin self.assertEqual-metodia.
 
 Metodissa olevia sulkujen laskureita ollaan myös testattu. 
 
@@ -34,7 +21,7 @@ Metodia ollaan testattu monipuolisilla syötteillä. Testeissä ollaan käytetty
 
 ### tokenize_input()
 
-Metodia ollaan testattu kokonaisluvuilla, desimaaliluvuilla ja funktioilla. Haluttu tokenisaatio ollaan kirjoitettu testiin manuaalisesti. Testissä hyödynnetään unittestin self.assertEqual-metodia.
+Metodia ollaan testattu kokonaisluvuilla, desimaaliluvuilla ja funktioilla. Metodia ollaan testattu myös muuttujien kanssa. Haluttu tokenisaatio ollaan kirjoitettu testiin manuaalisesti. Testissä hyödynnetään unittestin self.assertEqual-metodia.
 
 
 ### convert_infix_to_rpn()
@@ -43,7 +30,7 @@ Metodia ollaan testattu erilaisilla lukuarvoilla ja joillakin funktioilla. Halut
 
 ### calculate()
 
-Metodia ollaan testattu niin, että haluttu ratkaisu on laskettu pythonia hyödyntäen. Testit vertaavat saatua arvoa ja haluttua arvoa toisiinsa. Testeissä on käytetty kokonaislukuja, desimaalilukuja ja funktioita. Myös virheviestejä ollaan testattu. Testissä hyödynnetään unittestin self.assertEqual-metodia.
+Metodia ollaan testattu niin, että haluttu ratkaisu on laskettu pythonia hyödyntäen. Testit vertaavat saatua arvoa ja haluttua arvoa toisiinsa. Testeissä on käytetty kokonaislukuja, desimaalilukuja, funktioita ja muuttujia. Myös virheviestejä ollaan testattu. Testissä hyödynnetään unittestin self.assertEqual-metodia.
 
 
 ## Testien toisto

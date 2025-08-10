@@ -94,13 +94,18 @@ class Calculator:
                  and current_input[-1] not in self.variables) \
                  and addition_to_input == "=":
                 message = "Enter a variable or a value before an equal to sign."
-            elif current_input[-1] == "=" and addition_to_input == "×÷":
+            elif current_input[-1] == "=" and addition_to_input in "×÷":
                 message = "Operators not allowed after an equal to sign."
             elif not any(v in temp_tokens for v in self.variables) \
                  and current_input[-1] == "=" \
                  and addition_to_input not in self.variables:
                 message = "Enter a variable to save value to."
-            elif len(current_input) >= 2 and current_input[-2] == "=" \
+            elif not any(v in temp_tokens[:-2] for v in self.variables) \
+                 and len(current_input) >= 2 and current_input[-2] == "=" \
+                 and current_input[-1] in self.variables \
+                 and addition_to_input in self.variables:
+                message = "Unexpected character after variable."
+            elif len(current_input) > 3 and current_input[-2] == "=" \
                  and current_input[-1] in self.variables \
                  and addition_to_input in self.variables:
                 message = "Unexpected character after variable."
