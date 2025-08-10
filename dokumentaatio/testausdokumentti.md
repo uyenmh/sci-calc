@@ -23,7 +23,6 @@ Metodia ollaan testattu monipuolisilla syötteillä. Testeissä ollaan käytetty
 
 Metodia ollaan testattu kokonaisluvuilla, desimaaliluvuilla ja funktioilla. Metodia ollaan testattu myös muuttujien kanssa. Haluttu tokenisaatio ollaan kirjoitettu testiin manuaalisesti. Testissä hyödynnetään unittestin self.assertEqual-metodia.
 
-
 ### convert_infix_to_rpn()
 
 Metodia ollaan testattu erilaisilla lukuarvoilla ja joillakin funktioilla. Haluttu RPN-muoto ollaan selvitetty manuaalisesti. Testissä hyödynnetään unittestin self.assertEqual-metodia.
@@ -31,6 +30,11 @@ Metodia ollaan testattu erilaisilla lukuarvoilla ja joillakin funktioilla. Halut
 ### calculate()
 
 Metodia ollaan testattu niin, että haluttu ratkaisu on laskettu pythonia hyödyntäen. Testit vertaavat saatua arvoa ja haluttua arvoa toisiinsa. Testeissä on käytetty kokonaislukuja, desimaalilukuja, funktioita ja muuttujia. Myös virheviestejä ollaan testattu. Testissä hyödynnetään unittestin self.assertEqual-metodia.
+
+
+## Integraatiotestaus
+
+Integraatiotestausta ollaan toteutettu hyödyntämällä CalculatorUI-luokkaa. Testauksessa testataan, miten käyttöliittymä toimii sovelluslogiikan kanssa. Testeissä simuloidaan CalculatorUI-luokan metodeja add_to_entry, clear_entry, delete_last_char, calculate_input ja toggle_radians_and_degrees. Testit käsittelevät myös virheviestejä ja  laskureiden arvoja. Osa testeistä hyödyntää unittestin mock-objekteja.
 
 
 ## Testien toisto

@@ -10,7 +10,7 @@ Ohjelman aika- ja tilavaativuudet ovat molemmat O(n).
 
 ## Puutteet ja parannusehdotukset
 
-Ohjelmasta puuttuu tällä hetkellä vielä olennaisia toiminnallisuuksia, kuten min ja max funktiot ja muuttujien tallentaminen. Ohjelmalle voisi myös olla muuta testausta, kuin vain yksikkötestausta. Ohjelmalle voisi myös toteuttaa lisää funktioita, kuten logaritmi- ja eksponenttifunktioita. Koodista löytyy paljon if-elseä, jota voisi mahdollisesti vähentää. Lisäksi käyttöliittymän ulkoasua voisi parantaa.
+Ohjelmalle voisi toteuttaa lisää funktioita, kuten logaritmi- ja eksponenttifunktioita. Koodista löytyy paljon if-elseä, jota voisi mahdollisesti vähentää. Lisäksi käyttöliittymän ulkoasua voisi parantaa.
 
 ## Laajojen kielimallien käyttö
 
@@ -26,3 +26,4 @@ Käytin ChatGPT:tä välillä selventämään, mikä on hyväksyttävä matemaat
 - [Python Regex: re.search() VS re.findall() (GeeksforGeeks)](https://www.geeksforgeeks.org/python/python-regex-re-search-vs-re-findall/)
 - [Python Match Case (GeeksforGeeks)](https://www.geeksforgeeks.org/python/python-match-case-statement/#match-case-statement-with-python-if-condition)
 - [How to write a Python regular expression that matches floating point numbers? (tutorialspoint)](https://www.tutorialspoint.com/how-to-write-a-python-regular-expression-that-matches-floating-point-numbers)
+- [Python unittest.mock dokumentaatio](https://docs.python.org/3/library/unittest.mock.html)
