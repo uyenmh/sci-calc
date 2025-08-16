@@ -190,16 +190,13 @@ class Calculator:
                 self.reformatted_input += f" × {char}"
             elif prev_char in self.variables and char in "1234567890(":
                 self.reformatted_input += f" × {char}"
+            elif prev_char == ")" and char == "(":
+                self.reformatted_input += f" × {char}"
             else:
                 self.reformatted_input += f" {char}"
 
             prev_prev_char = prev_char
             prev_char = char
-
-        if self.left_parenthesis > self.right_parenthesis and prev_char in "1234567890.":
-            missing_parenthesis = self.left_parenthesis - self.right_parenthesis
-            self.reformatted_input += missing_parenthesis*" )"
-            self.right_parenthesis += missing_parenthesis
 
     def tokenize_input(self):
         """Tokenizes the given mathematical expression into a list of tokens.
@@ -221,10 +218,10 @@ class Calculator:
                 elif self.variables[first_variable] and self.variables[second_variable]:
                     self.variable_to_save = self.tokens.pop(0)
                     self.tokens.pop(0)
-            elif equal_sign_index == 1:
+            elif equal_sign_index == 1 and self.tokens[0] in self.variables:
                 self.variable_to_save = self.tokens.pop(0)
                 self.tokens.pop(0)
-            elif equal_sign_index == (len(self.tokens) - 2):
+            elif equal_sign_index == (len(self.tokens) - 2) and self.tokens[-1] in self.variables:
                 self.variable_to_save = self.tokens.pop()
                 self.tokens.pop()
 
@@ -300,13 +297,17 @@ class Calculator:
         """
         solution = []
 
-        match self.tokens[-1]:
-            case "+" | "-" | "×" | "÷":
-                return "The expression can't end with an operator."
-            case "(":
-                return "Parenthesis cannot be left empty."
-            case ",":
-                return "Enter a second value for the min or max function."
+        if self.reformatted_input:
+            match self.reformatted_input[-1]:
+                case "+" | "-" | "×" | "÷":
+                    return "The expression can't end with an operator."
+                case ",":
+                    return "Enter a second value for the min or max function."
+                case "=":
+                    return "The expression can't end with an equal to sign."
+            
+        if self.left_parenthesis > self.right_parenthesis:
+            return "Close all parenthesis."
 
         for i, token in enumerate(self.output_queue):
             if token in self.variables:
