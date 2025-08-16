@@ -1,6 +1,7 @@
 from unittest.mock import patch
 import tkinter as tk
 import unittest
+import math
 from ui.calc_ui import CalculatorUI
 
 class TestCalculatorIntegration(unittest.TestCase):
@@ -124,6 +125,94 @@ class TestCalculatorIntegration(unittest.TestCase):
         
         self.app.calculate_input()
         desired_output = 3-9
+        self.assertEqual(self.app.entry.get(), str(desired_output))
+
+    def test_calculate_input_with_functions(self):
+        self.app.add_to_entry("sin(")
+        self.app.add_to_entry(".")
+        self.app.add_to_entry("3")
+        self.app.add_to_entry("4")
+        self.app.add_to_entry("5")
+        self.app.add_to_entry("-")
+        self.app.add_to_entry("2")
+        self.app.add_to_entry("max(")
+        self.app.add_to_entry("4")
+        self.app.add_to_entry(",")
+        self.app.add_to_entry("7")
+        self.app.add_to_entry(")")
+        self.app.add_to_entry(")")
+        self.app.add_to_entry("(")
+        self.app.add_to_entry("(")
+        self.app.add_to_entry("2")
+        self.app.add_to_entry(")")
+        self.app.add_to_entry(")")
+        self.app.add_to_entry("min(")
+        self.app.add_to_entry("sin(")
+        self.app.add_to_entry("8")
+        self.app.add_to_entry(".")
+        self.app.add_to_entry("5")
+        self.app.add_to_entry("3")
+        self.app.add_to_entry("+")
+        self.app.add_to_entry("2")
+        self.app.add_to_entry(".")
+        self.app.add_to_entry("4")
+        self.app.add_to_entry(")")
+        self.app.add_to_entry(",")
+        self.app.add_to_entry("tan(")
+        self.app.add_to_entry("5")
+        self.app.add_to_entry("2")
+        self.app.add_to_entry("4")
+        self.app.add_to_entry(".")
+        self.app.add_to_entry("1")
+        self.app.add_to_entry("-")
+        self.app.add_to_entry("4")
+        self.app.add_to_entry("2")
+        self.app.add_to_entry(")")
+        self.app.add_to_entry("+")
+        self.app.add_to_entry("7")
+        self.app.add_to_entry(")")
+
+        self.app.calculate_input()
+        desired_output = math.sin(0.345-2*max(4,7))*((2))*min(math.sin(8.53+2.4),math.tan(5-24.1-42)+7)
+
+        self.assertEqual(self.app.entry.get(), str(desired_output))
+
+    @patch("tkinter.messagebox.showerror")
+    def test_calculate_input_with_many_parenthesis(self, mock_error):
+        self.app.add_to_entry("5")
+        self.app.add_to_entry("(")
+        self.app.add_to_entry("2")
+        self.app.add_to_entry("-")
+        self.app.add_to_entry("4")
+        self.app.add_to_entry("+")
+        self.app.add_to_entry("0")
+
+        self.app.calculate_input()
+        mock_error.assert_called_once()
+
+        self.app.add_to_entry(")")
+        self.app.add_to_entry("(")
+        self.app.add_to_entry("(")
+        self.app.add_to_entry("7")
+        self.app.add_to_entry(".")
+        self.app.add_to_entry("1")
+        self.app.add_to_entry("2")
+        self.app.add_to_entry("-")
+        self.app.add_to_entry("3")
+        self.app.add_to_entry("4")
+        self.app.add_to_entry(")")
+        self.app.add_to_entry("÷")
+        self.app.add_to_entry("4")
+        self.app.add_to_entry(".")
+        self.app.add_to_entry("5")
+
+        self.app.calculate_input()
+        self.assertEqual(mock_error.call_count, 2)
+
+        self.app.add_to_entry(")")
+        self.app.calculate_input()
+        desired_output = 5*(2-4+0)*((7.12-34)/4.5)
+
         self.assertEqual(self.app.entry.get(), str(desired_output))
 
     @patch("tkinter.messagebox.showerror")

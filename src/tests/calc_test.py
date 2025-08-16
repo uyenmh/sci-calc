@@ -309,14 +309,6 @@ class TestCalculator(unittest.TestCase):
 
         self.assertEqual(self.calc.reformatted_input, desired_reformatted_input)
 
-    def test_reformat_input_adding_right_parenthesis_to_end(self):
-        self.input = "(2+4-tan(20"
-        self.calc.left_parenthesis += 2
-        self.calc.insert_input(self.input)
-        desired_reformatted_input = "( 2 + 4 - tan ( 20 ) )"
-
-        self.assertEqual(self.calc.reformatted_input, desired_reformatted_input)
-
     def test_reformat_input_with_min_after_number(self):
         self.input = "2min(6,3)"
         self.calc.insert_input(self.input)
@@ -335,6 +327,13 @@ class TestCalculator(unittest.TestCase):
         self.input = "1a×9efg6-5"
         self.calc.insert_input(self.input)
         desired_reformatted_input = "1 × a × 9 × e × f × g × 6 - 5"
+
+        self.assertEqual(self.calc.reformatted_input, desired_reformatted_input)
+
+    def test_reformat_input_with_alot_of_parenthesis(self):
+        self.input = "5+(34.435+((35-326.35))+355+33)((2-14))+6+(((35+77)))35"
+        self.calc.insert_input(self.input)
+        desired_reformatted_input = "5 + ( 34.435 + ( ( 35 - 326.35 ) ) + 355 + 33 ) × ( ( 2 - 14 ) ) + 6 + ( ( ( 35 + 77 ) ) ) × 35"
 
         self.assertEqual(self.calc.reformatted_input, desired_reformatted_input)
 
@@ -422,6 +421,20 @@ class TestCalculator(unittest.TestCase):
 
         self.assertEqual(self.calc.output_queue, desired_rpn)
 
+    def test_convert_infix_to_rpn_with_many_parenthesis(self):
+        self.input = "(5-3+32((1+40+4-24(0.24+2.34))(4.3-2.13)))"
+        self.calc.insert_input(self.input)
+        desired_rpn = ["5", "3", "-", "32", "1", "40", "+", "4", "+", "24", "0.24", "2.34", "+", "×", "-", "4.3", "2.13", "-", "×", "×", "+"]
+
+        self.assertEqual(self.calc.output_queue, desired_rpn)
+
+    def test_conver_infix_to_rpn_with_multiple_functions(self):
+        self.input = "sin(max(4.2-0.33,cos(5+9-3))-√(3+7-1))"
+        self.calc.insert_input(self.input)
+        desired_rpn = ["4.2", "0.33", "-", "5", "9", "+", "3", "-", "cos", "max", "3", "7", "+", "1", "-", "√", "-", "sin"]
+
+        self.assertEqual(self.calc.output_queue, desired_rpn)
+
     def test_calculate_with_whole_numbers(self):
         desired_solution = -4 / 2 + ( 6 - 2 ) * 1
 
@@ -436,10 +449,11 @@ class TestCalculator(unittest.TestCase):
         self.assertEqual(output, desired_output)
 
     def test_calculate_with_expression_ending_in_left_parenthesis(self):
-        self.input = "2+1("
+        self.input = "2+1"
         self.calc.insert_input(self.input)
+        self.calc.check_validity_of_input(self.input, "(")
         output = self.calc.calculate()
-        desired_output = "Parenthesis cannot be left empty."
+        desired_output = "Close all parenthesis."
 
         self.assertEqual(output, desired_output)
 
@@ -551,9 +565,7 @@ class TestCalculator(unittest.TestCase):
         self.assertEqual(output, desired_output)
 
     def test_calculate_minmax_with_not_enough_values(self):
-        self.input = "min(1+2,3+4+max(5)"
-        self.calc.left_parenthesis = 2
-        self.calc.right_parenthesis = 1
+        self.input = "min(1+2,3+4+max(5))"
         self.calc.min_count = 1
         self.calc.max_count = 1
         self.calc.insert_input(self.input)
@@ -580,5 +592,63 @@ class TestCalculator(unittest.TestCase):
         a = 2
         b = 0
         desired_output = a+b+3
+
+        self.assertEqual(output, desired_output)
+
+    def test_calculate_with_several_functions(self):
+        self.input = "√(max(cos(3×0.58+3.2),4+7÷2))"
+        self.calc.insert_input(self.input)
+        output = self.calc.calculate()
+        desired_output = math.sqrt(max(math.cos(3*0.58+3.2),4+7/2))
+                                                
+        self.assertEqual(output, desired_output)
+
+    def test_calculate_with_alot_of_parenthesis(self):
+        self.input = "(5+27((7.49-2.902)×0.793)sin(5.30+(7.24-0.89))(0.3849÷1.45)5.30-6.01)"
+        self.calc.insert_input(self.input)
+        output = self.calc.calculate()
+        desired_output = (5+27*((7.49-2.902)*0.793)*math.sin(5.30+(7.24-0.89))*(0.3849/1.45)*5.30-6.01)
+                                                               
+        self.assertEqual(output, desired_output)
+
+    def test_calculate_with_parenthesis_and_functions(self):
+        self.input = "sin(0.345-2.587max(4,7))((2))min(sin(8.53+2.43),tan(5.3-24.1-42)+7.493)"
+        self.calc.insert_input(self.input)
+        output = self.calc.calculate()
+        desired_output = math.sin(0.345-2.587*max(4,7))*((2))*min(math.sin(8.53+2.43),math.tan(5.3-24.1-42)+7.493)
+
+        self.assertEqual(output, desired_output)
+
+    def test_calculate_with_parenthesis_functions_and_variables(self):
+        self.input = "(5+27((7.49-2.902)×0.793)sin(5.30+(7.24-0.89))(0.3849÷1.45)5.30-6.01)=a"
+        self.calc.insert_input(self.input)
+        self.calc.calculate()
+
+        self.input = "b=sin(0.345-2.587max(4,7))((2))min(sin(8.53+2.43),tan(5.3-24.1-42)+7.493)"
+        self.calc.insert_input(self.input)
+        self.calc.calculate()
+
+        a = (5+27*((7.49-2.902)*0.793)*math.sin(5.30+(7.24-0.89))*(0.3849/1.45)*5.30-6.01)
+        b = math.sin(0.345-2.587*max(4,7))*((2))*min(math.sin(8.53+2.43),math.tan(5.3-24.1-42)+7.493)
+
+        self.input = "a+b"
+        self.calc.insert_input(self.input)
+        output = self.calc.calculate()
+        desired_output = a+b
+
+        self.assertEqual(output, desired_output)
+
+    def test_calculate_with_missing_parenthesis(self):
+        self.input = "(5+27((7.49-2.902)×0.793)sin(5.30+(7.24-0.89))(0.3849÷1.45)5.30-6.01"
+
+        for char in self.input:
+            if char == "(":
+                self.calc.left_parenthesis += 1
+            elif char == ")":
+                self.calc.right_parenthesis += 1
+
+        self.calc.insert_input(self.input)
+        output = self.calc.calculate()
+        desired_output = "Close all parenthesis."
 
         self.assertEqual(output, desired_output)
