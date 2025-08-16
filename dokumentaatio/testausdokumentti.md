@@ -39,18 +39,49 @@ Integraatiotestausta ollaan toteutettu hyödyntämällä CalculatorUI-luokkaa. T
 
 ## Testien toisto
 
-Testit voidaan suorittaa alla olevalla komennolla virtuaaliympäristössä:
+Testit voidaan suorittaa alla olevalla komennolla
 
-`coverage run --branch -m pytest src; coverage html`
+```
+poetry run invoke test
+```
 
-Komento generoi samalla testikattavuusraportin tiedostoon _index.html_, jota voidaan tarkastella selaimessa.
+tai
+
+```
+poetry run invoke coverage_report
+```
+
+joka generoi samalla testikattavuusraportin tiedostoon _index.html_, jota voidaan tarkastella selaimessa.
 
 Testit voidaan suorittaa myös komennolla:
 
-`coverage run --branch -m pytest src; coverage report -m`
+```
+poetry run invoke coverage
+```
 
 Komento generoi tällöin testikattavuusraportin komentoriville.
 
+## Testien toisto virtuaaliympäristössä
+
+Testit voidaan suorittaa myös virtuaaliympäristössä ensin käynnistämällä virtuaaliympäristö komennolla
+
+```
+poetry shell
+```
+
+Tämän jälkeen voidaan suorittaa yksi alla olevista komennoista
+
+```
+invoke test
+```
+
+```
+invoke coverage_report
+```
+
+```
+invoke coverage
+```
 
 ## Testikattavuusraportti
 

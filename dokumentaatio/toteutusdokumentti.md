@@ -10,7 +10,7 @@ Ohjelman aika- ja tilavaativuudet ovat molemmat O(n).
 
 ## Puutteet ja parannusehdotukset
 
-Ohjelmalle voisi toteuttaa lisää funktioita, kuten logaritmi- ja eksponenttifunktioita. Koodista löytyy paljon if-elseä, jota voisi mahdollisesti vähentää. Lisäksi käyttöliittymän ulkoasua voisi parantaa.
+Ohjelmalle voisi toteuttaa lisää funktioita, kuten logaritmi- ja eksponenttifunktioita. Laskimella ei voi myöskään laskea vielä potensseja. Koodista löytyy paljon if-elseä, jota voisi mahdollisesti vähentää. Lisäksi käyttöliittymän ulkoasua voisi parantaa.
 
 ## Laajojen kielimallien käyttö
 
