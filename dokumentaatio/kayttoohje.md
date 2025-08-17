@@ -72,7 +72,7 @@ Muuttujille voidaan asettaa myös toisen muuttujan arvo. Tarkastellaan esim. las
 
 ### Funktiot
 
-- **√**: neliöjuuren sisälle voidaan syöttää sekä lukuarvoja että laskutoimituksia. Lukuarvojen ja laskutoimitusten tulosten pitää olla positiivisia, jotta laskin laskee neliöjuuren. Muuten laskin antaa käyttäjälle virheviestin virheellisestä syötteestä. Laskimeen voidaan syöttää esim. $√(7)$ tai $√(7.6-4)$.
+- **√**: neliöjuuren sisälle voidaan syöttää sekä lukuarvoja että laskutoimituksia. Lukuarvojen ja laskutoimitusten tulosten pitää olla positiivisia, jotta laskin laskee neliöjuuren. Muuten laskin antaa käyttäjälle virheviestin virheellisestä syötteestä. Laskimeen voidaan syöttää esim. $\sqrt{(7)}$ tai $\sqrt{(7.6-4)}$.
 - **sin, cos, tan**: trigonometriset funktiot voivat saada arvokseen sekä lukuarvoja että laskutoimituksia. Laskimeen voidaan syöttää esim. $sin(5)$ tai $tan(6.4-3)$. Trigonometriset funktiot toimivat sekä radiaaneissa että asteissa.
 - **sin⁻¹, cos⁻¹, tan⁻¹**: käänteiset trigonometriset funktiot voivat saada arvokseen sekä lukuarvoja että laskutoimituksia. Lukuarvojen ja laskutoimitusten tulosten pitää olla välillä -1 ja 1, jotta laskin laskee arvon. Muuten laskin antaa käyttäjälle virheviestin virheellisestä syötteestä. Laskimeen voidaan syöttää esim. $cos⁻¹(0.638)$ tai $cos⁻¹(5-4)$.
 - **min, max**: palauttavat pienimmän tai suurimman arvon kahden arvon väliltä. Nämä arvot erotetaan toisistaan pilkulla. Funktioihin voidaan asettaa sekä lukuarvoja että laskutoimituksia. Laskimeen voidaan syöttää esim. $min(3,9)$ tai $max(4-3+0.294,1-3)$.
