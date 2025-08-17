@@ -66,7 +66,8 @@ $5-4-6=b$
 
 Kun muuttujaan on tallennettu arvo, sitä voidaan käyttää normaalisti laskutoimituksissa. Esim. jos $a=3$, niin $a+1$ antaa tulokseksi $4$.
 
-Muuttujille voidaan asettaa myös toisen muuttujan arvo. Tarkastellaan esim. laskutoimitusta $a=b$. - Jos $a=9$ ja $b$:llä ei ole vielä arvoa, $b=9$ ja $a$ pysyy samana.
+Muuttujille voidaan asettaa myös toisen muuttujan arvo. Tarkastellaan esim. laskutoimitusta $a=b$. 
+- Jos $a=9$ ja $b$:llä ei ole vielä arvoa, $b=9$ ja $a$ pysyy samana.
 - Jos $a$:lla ei ole vielä arvoa ja $b=1$, $a=1$ ja $b$ pysyy samana.
 - Jos $a=2$ ja $b=0$, $a=0$ ja $b$ pysyy samana.
 
