@@ -465,6 +465,14 @@ class TestCalculator(unittest.TestCase):
 
         self.assertEqual(output, desired_output)
 
+    def test_calculate_with_expression_ending_in_equal_to_sign(self):
+        self.input = "4+2="
+        self.calc.insert_input(self.input)
+        output = self.calc.calculate()
+        desired_output = "The expression can't end with an equal to sign."
+
+        self.assertEqual(output, desired_output)
+
     def test_calculate_with_no_valid_variables(self):
         self.input = "a+2"
         self.calc.insert_input(self.input)

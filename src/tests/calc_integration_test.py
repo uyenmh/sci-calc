@@ -177,6 +177,45 @@ class TestCalculatorIntegration(unittest.TestCase):
 
         self.assertEqual(self.app.entry.get(), str(desired_output))
 
+    def test_calculate_input_many_times(self):
+        self.app.add_to_entry("4")
+        self.app.add_to_entry(".")
+        self.app.add_to_entry("0")
+        self.app.add_to_entry("1")
+        self.app.add_to_entry("(")
+        self.app.add_to_entry("2")
+        self.app.add_to_entry("+")
+        self.app.add_to_entry("7")
+        self.app.add_to_entry(")")
+
+        self.app.calculate_input()
+        desired_output = 4.01*(2+7)
+
+        self.assertEqual(self.app.entry.get(), str(desired_output))
+
+        self.app.add_to_entry("-")
+        self.app.add_to_entry("4")
+        self.app.add_to_entry("+")
+        self.app.add_to_entry("0")
+        self.app.add_to_entry(".")
+        self.app.add_to_entry("6")
+
+        self.app.calculate_input()
+        desired_output = desired_output-4+0.6
+
+        self.assertEqual(self.app.entry.get(), str(desired_output))
+
+        self.app.add_to_entry("max(")
+        self.app.add_to_entry("9")
+        self.app.add_to_entry(",")
+        self.app.add_to_entry("0")
+        self.app.add_to_entry(")")
+
+        self.app.calculate_input()
+        desired_output = desired_output * max(9,0)
+
+        self.assertEqual(self.app.entry.get(), str(desired_output))
+
     @patch("tkinter.messagebox.showerror")
     def test_calculate_input_with_many_parenthesis(self, mock_error):
         self.app.add_to_entry("5")
